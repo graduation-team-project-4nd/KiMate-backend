@@ -14,7 +14,10 @@ export async function buildApp() {
 
   // Plugins
   await app.register(cors);
-  await app.register(helmet);
+  await app.register(helmet, {
+    // Swagger UI requires relaxed CSP to load inline assets
+    contentSecurityPolicy: false,
+  });
 
   // Swagger
   await app.register(swagger, swaggerOptions);
