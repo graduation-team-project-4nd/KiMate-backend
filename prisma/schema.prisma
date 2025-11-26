@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id        String  @id @default(uuid())
+  locale    String?
+  kioskType String?
+  kioskName String?
+  deviceId  String?
+
+  status    SessionStatus @default(IN_PROGRESS)
+  startedAt DateTime      @default(now())
+  endedAt   DateTime?
+
+  events    SessionEvent[]
+  feedbacks Feedback[]
+
+  @@index([status])
+  @@index([startedAt])
+}
+
+enum SessionStatus {
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  ERROR
+}
+
+model SessionEvent {
+  id        String    @id @default(uuid())
+  sessionId String
+  type      EventType
+  timestamp DateTime  @default(now())
+  payload   Json
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([type])
+}
+
+enum EventType {
+  SCREEN_CHANGED
+  AI_INTENT_RESULT
+  AI_TARGET_RESULT
+  TARGET_SELECTED
+  WRONG_TOUCH
+  RETRY
+}
+
+model Feedback {
+  id        String   @id @default(uuid())
+  sessionId String
+  rating    Int
+  comment   String?
+  tags      String[]
+  timestamp DateTime @default(now())
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+}
