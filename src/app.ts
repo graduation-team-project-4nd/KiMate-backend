@@ -8,6 +8,7 @@ import { swaggerOptions, swaggerUiOptions } from "./swagger.js";
 // 라우트들
 import sessionRoutes from "./modules/session/session.route.js";
 import eventRoutes from "./modules/event/event.route.js";
+import aiRoutes from "./modules/ai/ai.route.js";
 
 export async function buildApp() {
   const app = Fastify({ logger: true });
@@ -31,5 +32,6 @@ export async function buildApp() {
   // Register Routes
   app.register(sessionRoutes, { prefix: "/v1/sessions" });
   app.register(eventRoutes, { prefix: "/v1/sessions" });
+  app.register(aiRoutes, { prefix: "/v1/ai"});
   return app;
 }
