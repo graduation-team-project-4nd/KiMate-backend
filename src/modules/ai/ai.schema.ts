@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 export const analyzeSchema = z.object({
   session_id: z.string(),
@@ -31,3 +32,11 @@ export const screenDetectSchema = z.object({
 });
 
 export type ScreenDetectInput = z.infer<typeof screenDetectSchema>;
+
+export const analyzeJsonSchemaRoot = zodToJsonSchema(analyzeSchema as any, "AnalyzeSchema");
+export const analyzeJsonSchema =
+  analyzeJsonSchemaRoot.definitions?.AnalyzeSchema ?? analyzeJsonSchemaRoot;
+
+export const screenJsonSchemaRoot = zodToJsonSchema(screenDetectSchema as any, "ScreenDetectSchema");
+export const screenDetectJsonSchema =
+  screenJsonSchemaRoot.definitions?.ScreenDetectSchema ?? screenJsonSchemaRoot;
