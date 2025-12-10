@@ -25,7 +25,8 @@ export default async function aiRoutes(app: FastifyInstance) {
                 type: "object",
                 properties: {
                     type: { type: "string" },
-                    params: { type: "object" }
+                    // AI 서버에서 내려주는 params 필드를 그대로 전달하기 위해 추가 필드를 허용
+                    params: { type: "object", additionalProperties: true }
                 }
                 }
             }
